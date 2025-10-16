@@ -1,0 +1,86 @@
+---
+// Animated Section Component using Motion
+// Provides smooth animations for page sections
+interface Props {
+  delay?: number;
+  class?: string;
+  animation?: 'fade' | 'slide-up' | 'slide-left' | 'slide-right' | 'zoom' | 'rotate';
+}
+
+const { delay = 0, class: className = '', animation = 'fade' } = Astro.props;
+---
+
+<div 
+  class={`animated-section ${className}`}
+  data-animation={animation}
+  data-delay={delay}
+>
+  <slot />
+</div>
+
+<script>
+  import { animate, inView } from 'motion';
+
+  // Animation configurations
+  const animations = {
+    fade: {
+      opacity: [0, 1],
+    },
+    'slide-up': {
+      opacity: [0, 1],
+      transform: ['translateY(50px)', 'translateY(0)'],
+    },
+    'slide-left': {
+      opacity: [0, 1],
+      transform: ['translateX(50px)', 'translateX(0)'],
+    },
+    'slide-right': {
+      opacity: [0, 1],
+      transform: ['translateX(-50px)', 'translateX(0)'],
+    },
+    zoom: {
+      opacity: [0, 1],
+      transform: ['scale(0.8)', 'scale(1)'],
+    },
+    rotate: {
+      opacity: [0, 1],
+      transform: ['rotate(-10deg) scale(0.9)', 'rotate(0) scale(1)'],
+    },
+  };
+
+  // Single function to initialize animations
+  function initAnimations() {
+    const sections = document.querySelectorAll('.animated-section');
+
+    sections.forEach((section) => {
+      const animationType = section.getAttribute('data-animation') || 'fade';
+      const delay = parseFloat(section.getAttribute('data-delay') || '0');
+
+      // Set initial state
+      Object.assign((section as HTMLElement).style, {
+        opacity: '0',
+      });
+
+      // Animate when element comes into view
+      inView(
+        section,
+        () => {
+          const keyframes = (animations as any)[animationType] || (animations as any).fade;
+          const opts: any = {
+            duration: 0.8,
+            delay: delay,
+            easing: [0.22, 0.03, 0.26, 1],
+          };
+          animate(section, keyframes, opts);
+        },
+        { amount: 0.3 }
+      );
+    });
+  }
+
+  // Initialize on first load
+  document.addEventListener('DOMContentLoaded', initAnimations);
+
+  // Re-initialize on Astro page transitions
+  document.addEventListener('astro:page-load', initAnimations);
+</script>

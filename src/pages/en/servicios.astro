@@ -1,0 +1,89 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import NavBar from '../../components/NavBar.astro';
+import Footer from '../../components/footer.astro';
+import AnimatedSection from '../../components/AnimatedSection.astro';
+import ServicesHero from '../../components/ServicesHero.astro';
+import ServicesGrid from '../../components/ServicesGrid.astro';
+import ServicesCTA from '../../components/ServicesCTA.astro';
+import BrandCite from '../../components/BrandCite.astro';
+import { loadLocaleSync } from '../../utils/i18n';
+
+const servicios = [
+  {
+    titulo: "Income Tax Return",
+    descripcion: "Preparation and filing of returns for individuals and corporations, with advice on deductions and compliance before Hacienda and the IRS.",
+    icono: "mdi:file-document",
+    caracteristicas: [
+      "Preparation of individual and corporate returns",
+      "Optimization of deductions and tax credits",
+      "Amended returns and follow-up",
+      "Tax compliance advisory"
+    ]
+  },
+  {
+    titulo: "Sales and Use Tax Return",
+    descripcion: "IVU management for businesses: calculation, reconciliation and monthly filing to comply with sales and use obligations.",
+    icono: "mdi:cash-register",
+    caracteristicas: [
+      "IVU calculation and records by period",
+      "Monthly electronic filings",
+      "Sales reconciliation and exemption control",
+      "Preventive billing audits"
+    ]
+  },
+  {
+    titulo: "Tax and Financial Consulting",
+    descripcion: "Strategic advisory for tax planning, financial optimization and support in key business decisions.",
+    icono: "mdi:chart-line",
+    caracteristicas: [
+      "Financial analysis and KPIs",
+      "Tax planning and structuring",
+      "Projection models and budgets",
+      "Advisory on transactions and restructures"
+    ]
+  }
+];
+
+const meta = {
+  title: 'Services',
+  description: 'Accounting, payroll and tax filing services in Puerto Rico. Learn about our packages and solutions.',
+  url: 'https://vazquezquilesaccounting.com/en/servicios',
+  image: '/logo.png',
+  lang: 'en'
+}
+
+const locale = loadLocaleSync(meta.lang as any);
+---
+
+<Layout {...meta}>
+  <NavBar lang={meta.lang} locale={locale} />
+  
+  <ServicesHero lang={meta.lang} locale={locale} />
+
+  <ServicesGrid servicios={servicios} />
+
+  <BrandCite lang={meta.lang} locale={locale} />
+
+  <!-- CTA Section -->
+  <section class="bg-blue-600 text-white py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <AnimatedSection animation="slide-up" delay={0.2}>
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">
+          Ready to optimize your finances?
+        </h2>
+        <p class="text-xl mb-8 text-blue-100">
+          Contact us today and discover how we can help you achieve your financial goals
+        </p>
+        <a 
+          href="/en/contacto" 
+          class="inline-block bg-white text-blue-600 font-bold py-3 px-8 rounded-lg hover:bg-gray-100 transition-colors duration-300 shadow-lg"
+        >
+          Request Free Consultation
+        </a>
+      </AnimatedSection>
+    </div>
+  </section>
+
+  <Footer lang={meta.lang} locale={locale} />
+</Layout>

@@ -1,0 +1,144 @@
+---
+import Layout from '../layouts/Layout.astro';
+import NavBar from '../components/NavBar.astro';
+import Footer from '../components/footer.astro';
+import AnimatedSection from '../components/AnimatedSection.astro';
+import ServicesHero from '../components/ServicesHero.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+import ServicesCTA from '../components/ServicesCTA.astro';
+import BrandCite from '../components/BrandCite.astro';
+import { loadLocaleSync } from '../utils/i18n';
+
+const servicios = [
+  {
+    titulo: "Planilla de Contribución sobre ingresos",
+    descripcion: "Preparación y radicación de planillas para personas naturales y jurídicas, con asesoría en deducciones y cumplimiento ante Hacienda e IRS.",
+    icono: "mdi:file-document",
+    caracteristicas: [
+      "Preparación de planillas individuales y corporativas",
+      "Optimización de deducciones y créditos fiscales",
+      "Declaraciones enmendadas y seguimiento",
+      "Asesoría en cumplimiento tributario"
+    ]
+  },
+  {
+    titulo: "Planilla de Impuestos sobre Ventas y Uso",
+    descripcion: "Gestión del IVU para comercios: cálculo, conciliación y radicación mensual para cumplir con las obligaciones de ventas y uso.",
+    icono: "mdi:cash-register",
+    caracteristicas: [
+      "Cálculo y registro del IVU por periodo",
+      "Declaraciones mensuales y presentación electrónica",
+      "Conciliación de ventas y control de exenciones",
+      "Auditoría preventiva de facturación"
+    ]
+  },
+  {
+    titulo: "Consultoría Contributiva y Financiera",
+    descripcion: "Asesoría estratégica para planificación tributaria, optimización financiera y soporte en decisiones empresariales clave.",
+    icono: "mdi:chart-line",
+    caracteristicas: [
+      "Análisis financiero y KPIs",
+      "Planificación contributiva y estructuración",
+      "Modelos de proyección y presupuestos",
+      "Asesoría en transacciones y reestructuras"
+    ]
+  },
+  {
+    titulo: "Permiso Único",
+    descripcion: "Tramitamos el Permiso Único y demás autorizaciones necesarias para operar (municipios, bomberos, salud), con preparación completa de la documentación.",
+    icono: "mdi:file-certificate",
+    caracteristicas: [
+      "Preparación y presentación de solicitudes",
+      "Coordinación con agencias municipales y estatales",
+      "Recolección de documentación técnica requerida",
+      "Seguimiento y gestión de observaciones"
+    ]
+  },
+  {
+    titulo: "Planillas de Caudal Relicto",
+    descripcion: "Asesoría y preparación de planillas relacionadas con sucesiones y caudales relictos, trabajando con abogados y fiduciarios según corresponda.",
+    icono: "mdi:scale-balance",
+    caracteristicas: [
+      "Preparación de inventario y documentación sucesoria",
+      "Cálculo de impuestos sucesorios y obligaciones",
+      "Coordinación con asesores legales",
+      "Presentación y seguimiento ante Hacienda"
+    ]
+  },
+  {
+    titulo: "Nóminas",
+    descripcion: "Servicio integral de nómina: cálculo, retenciones, depósitos y cumplimiento de informes y formularios laborales y contributivos.",
+    icono: "mdi:account-group",
+    caracteristicas: [
+      "Procesamiento de nómina quincenal/mensual",
+      "Cálculo de retenciones y contribuciones patronales",
+      "Generación de reportes y formularios (W-2, 499R-2/3)",
+      "Depósito directo y gestión de pagos"
+    ]
+  },
+  {
+    titulo: "Planillas de Donación",
+    descripcion: "Preparación y radicación de planillas relacionadas con donaciones, incluyendo asesoría sobre beneficios fiscales y documentación requerida.",
+    icono: "mdi:gift",
+    caracteristicas: [
+      "Asesoría sobre implicaciones fiscales de donaciones",
+      "Preparación de documentación y formularios",
+      "Cálculo de deducciones y beneficios",
+      "Radicación y certificaciones ante Hacienda"
+    ]
+  },
+  {
+    titulo: "Planillas Trimestrales",
+    descripcion: "Gestión de declaraciones trimestrales y pagos estimados para mantener el cumplimiento fiscal durante el año.",
+    icono: "mdi:calendar",
+    caracteristicas: [
+      "Preparación de declaraciones trimestrales",
+      "Cálculo y presentación de pagos estimados",
+      "Reconciliación de cuentas y cobros",
+      "Asesoría para evitar multas y recargos"
+    ]
+  }
+];
+
+const meta = {
+  title: 'Servicios',
+  description: 'Servicios de contabilidad, preparación de planillas, nómina y consultoría financiera para negocios en Puerto Rico. Conoce nuestros paquetes y soluciones.',
+  url: 'https://vazquezquilesaccounting.com/servicios',
+  image: '/logo.png',
+  lang: 'es'
+}
+
+const locale = loadLocaleSync(meta.lang as any);
+---
+
+<Layout {...meta}>
+  <NavBar lang={meta.lang} locale={locale} />
+  
+  <ServicesHero lang={meta.lang} locale={locale} />
+
+  <ServicesGrid servicios={servicios} />
+
+  <BrandCite lang={meta.lang} locale={locale} />
+
+  <!-- CTA Section -->
+  <section class="bg-blue-600 text-white py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <AnimatedSection animation="slide-up" delay={0.2}>
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">
+          {locale['services.ctaTitle'] ?? '¿Listo para optimizar tus finanzas?'}
+        </h2>
+        <p class="text-xl mb-8 text-blue-100">
+          {locale['services.ctaBody'] ?? 'Contáctanos hoy y descubre cómo podemos ayudarte a alcanzar tus objetivos financieros'}
+        </p>
+        <a 
+          href={meta.lang === 'en' ? '/en/contacto' : '/contacto'} 
+          class="inline-block bg-white text-blue-600 font-bold py-3 px-8 rounded-lg hover:bg-gray-100 transition-colors duration-300 shadow-lg"
+        >
+          {locale['services.ctaButton'] ?? 'Solicitar Consulta Gratuita'}
+        </a>
+      </AnimatedSection>
+    </div>
+  </section>
+
+  <Footer lang={meta.lang} locale={locale} />
+</Layout>

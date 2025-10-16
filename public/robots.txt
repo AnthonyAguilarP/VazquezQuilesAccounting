@@ -1,0 +1,5 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://vazquezquilesaccounting.com/sitemap.xml
+Host: vazquezquilesaccounting.com

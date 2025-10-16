@@ -1,0 +1,34 @@
+{
+  "site.title": "Vazquez Quiles Accounting",
+  "nav.home": "Home",
+  "nav.services": "Services",
+  "nav.contact": "Contact",
+
+  "home.title": "Vazquez Quiles Accounting",
+  "home.subtitle": "We are the most reliable accounting company in Puerto Rico, providing value and security to payroll and tax filing processes for businesses and individuals on the island.",
+  "home.primaryCta": "Trusted Accounting for Your Business",
+  "home.secondaryCta": "Explore Our Services",
+
+  "services.title": "Our Services",
+  "services.subtitle": "Comprehensive accounting solutions designed for your business success in Puerto Rico",
+  "services.ctaTitle": "Ready to optimize your finances?",
+  "services.ctaBody": "Contact us today and discover how we can help you achieve your financial goals",
+  "services.ctaButton": "Request Free Consultation",
+
+  "contact.title": "Contact",
+  "contact.subtitle": "Contact Vázquez Quiles Accounting for inquiries about accounting, tax filing, and payroll. Schedule a consultation today."
+
+  ,"contact.info.addressLabel": "Address",
+  "contact.info.phoneLabel": "Phone",
+  "contact.info.emailLabel": "Email",
+  "contact.info.hoursLabel": "Hours",
+  "why.title": "Why choose us?",
+  "why.experience": "Over 20 years of experience",
+  "why.certified": "Certified and licensed accountants",
+  "why.personal": "Personalized attention",
+  "why.tech": "State-of-the-art technology",
+  "footer.navTitle": "Quick Links",
+  "footer.contactTitle": "Contact Us",
+  "footer.locationTitle": "Our Location",
+  "footer.mapNote": "Pan the map to interact."
+}

@@ -1,0 +1,66 @@
+---
+// src/components/NuestraMisionProposito.astro
+import { Icon } from 'astro-icon/components';
+
+const { lang = 'es', locale: propLocale } = Astro.props as { lang?: string, locale?: Record<string,string> };
+
+// Datos configurables en ES y EN
+const propositoEs = {
+  titulo: 'Empoderar a través de servicios contables confiables, accesibles, seguridad y visión de futuro.',
+  subtitulo: 'Porque todos merecen entender sus números sin miedo ni misterio.',
+  texto: 'Transformamos lo complicado en claro, lo técnico en útil, y lo costoso en accesible. Aquí, cada cliente importa, cada factura cuenta, y cada decisión se respalda con datos sólidos.',
+  lema: 'Más que tu aliado, somos parte de tu equipo.',
+  icono: 'mdi:target'
+};
+
+const propositoEn = {
+  titulo: 'Empower through reliable, accessible accounting services, safety and forward-looking vision.',
+  subtitulo: 'Because everyone deserves to understand their numbers without fear or mystery.',
+  texto: 'We turn the complicated into the clear, the technical into the useful, and the costly into the accessible. Here, every client matters, every invoice counts, and every decision is backed by solid data.',
+  lema: 'More than your ally — we are part of your team.',
+  icono: 'mdi:target'
+};
+
+const propositoData = (lang === 'en') ? propositoEn : propositoEs;
+
+// Opciones de estilo
+const colorPrincipal = 'text-indigo-600 dark:text-indigo-400';
+const fondoSeccion = 'bg-gray-100 dark:bg-gray-900';
+const fondoTarjeta = 'bg-white dark:bg-gray-800';
+---
+
+<section class={`py-20 sm:py-28 ${fondoSeccion}`}>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="text-center max-w-4xl mx-auto">
+      
+      <p class={`text-base font-semibold uppercase tracking-wide ${colorPrincipal}`}>
+        {propositoData.subtitulo}
+      </p>
+      
+      <h2 class={`mt-2 text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl md:text-5xl`}>
+        {propositoData.titulo}
+      </h2>
+    </div>
+
+    <div class={`mt-12 mx-auto max-w-3xl ${fondoTarjeta} p-8 sm:p-12 rounded-2xl shadow-2xl ring-1 ring-gray-200 dark:ring-gray-700`}>
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+        
+        <div class="flex-shrink-0">
+          <Icon name={propositoData.icono} class={`w-12 h-12 sm:w-16 sm:h-16 ${colorPrincipal}`} />
+        </div>
+        
+        <div>
+          <p class={`text-xl font-bold mb-3 text-gray-900 dark:text-white`}>
+            {propositoData.lema}
+          </p>
+          
+          <p class="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+            {propositoData.texto}
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,80 @@
+---
+// src/components/LlamadaAccionPrincipal.astro
+
+const { lang = 'es', locale: propLocale } = Astro.props as { lang?: string, locale?: Record<string,string> };
+
+// Datos Configurables del CTA en ES y EN
+const ctaEs = {
+  titulo: '¿Listo para subir de nivel?',
+  subtitulo: 'Hablemos de cómo nuestros valores pueden convertirse en el motor de tu éxito.',
+  botonPrincipal: { texto: 'Comenzar Ahora', enlace: '/contacto', estilo: 'bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500' },
+  botonSecundario: { texto: 'Ver Servicios', enlace: '/servicios', estilo: 'bg-white hover:bg-gray-50 focus:ring-indigo-500 text-gray-700 border border-gray-300' }
+};
+
+const ctaEn = {
+  titulo: 'Ready to level up?',
+  subtitulo: "Let's talk about how our values can become the engine of your success.",
+  botonPrincipal: { texto: 'Get Started', enlace: '/en/contacto', estilo: 'bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500' },
+  botonSecundario: { texto: 'View Services', enlace: '/en/servicios', estilo: 'bg-white hover:bg-gray-50 focus:ring-indigo-500 text-gray-700 border border-gray-300' }
+};
+
+const ctaData = (lang === 'en') ? ctaEn : ctaEs;
+---
+
+<section class="py-16 sm:py-24 bg-gray-50 dark:bg-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="relative isolate overflow-hidden bg-indigo-700 dark:bg-indigo-900 rounded-3xl p-10 sm:p-16 lg:p-24 shadow-xl">
+      
+      <svg
+        viewBox="0 0 1024 1024"
+        class="absolute left-1/2 top-1/2 -z-10 h-[64rem] w-[64rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)]"
+        aria-hidden="true"
+      >
+        <circle
+          cx="512"
+          cy="512"
+          r="512"
+          fill="url(#CTA-gradient)"
+          fill-opacity="0.3"
+        />
+        <defs>
+          <radialGradient id="CTA-gradient">
+            <stop stop-color="#4F46E5" />
+            <stop offset="1" stop-color="#1E40AF" />
+          </radialGradient>
+        </defs>
+      </svg>
+
+      <div class="max-w-4xl mx-auto text-center">
+        
+        <h2 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
+          {ctaData.titulo}
+        </h2>
+        
+        <p class="mt-6 text-xl text-indigo-200 dark:text-indigo-300">
+          {ctaData.subtitulo}
+        </p>
+        
+        <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4">
+          
+          <a
+            href={ctaData.botonPrincipal.enlace}
+            class={`inline-flex justify-center items-center px-8 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white ${ctaData.botonPrincipal.estilo} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-indigo-700 dark:focus:ring-offset-indigo-900 transition duration-150 ease-in-out`}
+          >
+            {ctaData.botonPrincipal.texto}
+          </a>
+          
+          <a
+            href={ctaData.botonSecundario.enlace}
+            class={`inline-flex justify-center items-center px-8 py-3 text-base font-medium rounded-full shadow-md ${ctaData.botonSecundario.estilo} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-indigo-700 dark:focus:ring-offset-indigo-900 transition duration-150 ease-in-out`}
+          >
+            {ctaData.botonSecundario.texto}
+          </a>
+          
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</section>

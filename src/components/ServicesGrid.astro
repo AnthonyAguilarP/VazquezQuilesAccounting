@@ -1,0 +1,28 @@
+---
+import AnimatedSection from './AnimatedSection.astro';
+import ServiceCard from './ServiceCard.astro';
+import { Icon } from 'astro-icon/components';
+
+export interface Service {
+  titulo: string;
+  descripcion: string;
+  icono: string;
+  caracteristicas: string[];
+}
+
+const { servicios } = Astro.props as { servicios: Service[] };
+---
+
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {servicios.filter(Boolean).map((servicio, index) => (
+        <AnimatedSection animation="zoom" delay={0.1 * index}>
+          <ServiceCard servicio={servicio}>
+            <Icon slot="icon" name={servicio.icono} class="w-8 h-8 text-blue-600" />
+          </ServiceCard>
+        </AnimatedSection>
+      ))}
+    </div>
+  </div>
+</section>

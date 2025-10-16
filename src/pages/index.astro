@@ -1,11 +1,58 @@
 ---
-import Welcome from '../components/Welcome.astro';
+import NavBar from '../components/NavBar.astro';
+import Carousel from '../components/Carousel.astro';
 import Layout from '../layouts/Layout.astro';
+import accountingTeam from '../assets/accounting-team.png';
+import businessConsulting from '../assets/business-consulting.png';
+import heroBackground from '../assets/hero-background.png';
+import HeroSection from '../components/HeroSection.astro';
+import Values from '../components/Values.astro';
+import CallAction from '../components/callAction.astro';
+import OurPurpose from '../components/ourPurpose.astro';
+import Footer from '../components/footer.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const carouselSlides = [
+  {
+    image: accountingTeam,
+    alt: 'A team of accountants working together in a modern office.',
+    title: 'Evaluación y diagnóstico',
+    description: 'A través de una reunión inicial, conocemos tu situación financiera y contributiva.'
+  },
+  {
+    image: businessConsulting,
+    alt: 'A consultant pointing at financial charts on a tablet.',
+    title: 'Ejecución u optimización',
+    description: 'Gestionamos las planillas de tu negocio mes a mes (ingresos, IVU y caudales relictos) para asegurar el crecimiento integral de tu inversión.'
+  },
+]
+
+import { loadLocaleSync } from '../utils/i18n';
+
+const meta = {
+  title: 'Inicio',
+  description: 'Vázquez Quiles Accounting - Servicios de contabilidad, planillas y nómina en Puerto Rico. Apoyamos a negocios e individuos con precisión y cumplimiento.',
+  url: 'https://vazquezquilesaccounting.com/',
+  image: heroBackground.src,
+  lang: 'es'
+}
+
+const locale = loadLocaleSync(meta.lang as any);
 ---
 
-<Layout>
-	<Welcome />
+<Layout {...meta} preloadImage={heroBackground.src}>
+    <NavBar lang={meta.lang} locale={locale} />
+    <HeroSection
+      title={locale['home.title'] ?? 'Vazquez Quiles Accounting'}
+      subtitle={locale['home.subtitle'] ?? 'Somos la compañía de contabilidad más confiable en todo Puerto Rico, aportando valor y seguridad a los procesos de planillas y nóminas de los negocios e individuos en la isla.'}
+      primaryCtaText={locale['home.primaryCta'] ?? 'Contabilidad de Confianza para tu negocio'}
+      primaryCtaLink={meta.lang === 'en' ? '/en/contacto' : '/contacto'}
+      secondaryCtaText={locale['home.secondaryCta'] ?? 'Explora Nuestros Servicios'}
+      secondaryCtaLink={meta.lang === 'en' ? '/en/servicios' : '/servicios'}
+      backgroundImage={heroBackground.src}
+    />
+  <Values lang={meta.lang} locale={locale} />
+  <OurPurpose lang={meta.lang} locale={locale} />
+  <CallAction lang={meta.lang} locale={locale} />
+  <Carousel slides={carouselSlides} />
+  <Footer lang={meta.lang} locale={locale} />
 </Layout>
