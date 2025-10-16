@@ -1,0 +1,46 @@
+---
+const { lang = 'es', locale: propLocale } = Astro.props as { lang?: string, locale?: Record<string,string> };
+const defaults = (lang === 'en') ? {
+  'why.title': 'Why choose us?',
+  'why.experience': 'Over 20 years of experience',
+  'why.certified': 'Certified and licensed accountants',
+  'why.personal': 'Personalized attention',
+  'why.tech': 'State-of-the-art technology'
+} : {
+  'why.title': '¿Por qué elegirnos?',
+  'why.experience': 'Más de 20 años de experiencia',
+  'why.certified': 'Contadores certificados y licenciados',
+  'why.personal': 'Atención personalizada',
+  'why.tech': 'Tecnología de punta'
+};
+const locale = { ...defaults, ...(propLocale ?? {}) };
+---
+<div class="bg-white rounded-xl shadow-lg p-8">
+  <h3 class="text-2xl font-bold text-gray-900 mb-4">{locale['why.title']}</h3>
+  <ul class="space-y-3">
+    <li class="flex items-start">
+      <svg class="w-6 h-6 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+      </svg>
+      <span class="text-gray-700">{locale['why.experience']}</span>
+    </li>
+    <li class="flex items-start">
+      <svg class="w-6 h-6 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+      </svg>
+      <span class="text-gray-700">{locale['why.certified']}</span>
+    </li>
+    <li class="flex items-start">
+      <svg class="w-6 h-6 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+      </svg>
+      <span class="text-gray-700">{locale['why.personal']}</span>
+    </li>
+    <li class="flex items-start">
+      <svg class="w-6 h-6 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+      </svg>
+      <span class="text-gray-700">{locale['why.tech']}</span>
+    </li>
+  </ul>
+</div>

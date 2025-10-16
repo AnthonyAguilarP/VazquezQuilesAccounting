@@ -1,0 +1,60 @@
+{
+  "site.title": "Vázquez Quiles Accounting",
+  "nav.home": "Inicio",
+  "nav.services": "Servicios",
+  "nav.contact": "Contacto",
+
+  "home.title": "Vazquez Quiles Accounting",
+  "home.subtitle": "Somos la compañía de contabilidad más confiable en todo Puerto Rico, aportando valor y seguridad a los procesos de planillas y nóminas de los negocios e individuos en la isla.",
+  "home.primaryCta": "Contabilidad de Confianza para tu negocio",
+  "home.secondaryCta": "Explora Nuestros Servicios",
+
+  "services.title": "Nuestros Servicios",
+  "services.subtitle": "Soluciones contables integrales diseñadas para el éxito de tu negocio en Puerto Rico",
+  "services.ctaTitle": "¿Listo para optimizar tus finanzas?",
+  "services.ctaBody": "Contáctanos hoy y descubre cómo podemos ayudarte a alcanzar tus objetivos financieros",
+  "services.ctaButton": "Solicitar Consulta Gratuita",
+
+  "contact.title": "Contacto",
+  "contact.subtitle": "Contacta a Vázquez Quiles Accounting para consultas sobre contabilidad, planillas y nómina. Agenda una consulta hoy mismo.",
+
+  "values.title": "Valores que Impulsan Cada Servicio",
+  "values.subtitle": "La ética y la dedicación definen cómo trabajamos. Descubre los valores que aplicamos en cada solución que ofrecemos.",
+
+  "brand.inspiration": "Inspiración",
+
+  "why.title": "¿Por qué elegirnos?",
+  "why.experience": "Más de 20 años de experiencia",
+  "why.certified": "Contadores certificados y licenciados",
+  "why.personal": "Atención personalizada",
+  "why.tech": "Tecnología de punta",
+
+  "form.title": "Envíanos un mensaje",
+  "form.send": "Enviar Mensaje",
+  "form.name": "Nombre completo",
+  "form.email": "Correo electrónico",
+  "form.phone": "Teléfono",
+  "form.service": "Servicio de interés",
+  "form.message": "Mensaje",
+  "form.selectService": "Selecciona un servicio",
+  "form.service.contabilidad": "Contabilidad de Negocios",
+  "form.service.planillas": "Preparación de Planillas",
+  "form.service.nomina": "Nómina y Recursos Humanos",
+  "form.service.consultoria": "Consultoría Financiera",
+  "form.service.auditoria": "Auditoría Interna",
+  "form.service.ivu": "Servicios de IVU",
+  "form.service.otro": "Otro",
+
+  "footer.developed": "Sitio web desarrollado y soportado por",
+  "footer.agency": "Agencia de Marketing Digital",
+
+  "contact.info.addressLabel": "Dirección",
+  "contact.info.phoneLabel": "Teléfono",
+  "contact.info.emailLabel": "Email",
+  "contact.info.hoursLabel": "Horario",
+  "footer.navTitle": "Navegación Rápida",
+  "footer.contactTitle": "Contáctanos",
+  "footer.locationTitle": "Nuestra Ubicación",
+  "footer.mapNote": "Desplázate sobre el mapa para interactuar."
+}
+  

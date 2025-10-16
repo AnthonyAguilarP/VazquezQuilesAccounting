@@ -1,0 +1,35 @@
+---
+export interface Service {
+  titulo: string;
+  descripcion: string;
+  icono: string;
+  caracteristicas: string[];
+}
+
+const { servicio } = Astro.props as { servicio: Service };
+---
+
+<div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-8">
+  <div class="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6">
+    <slot name="icon">
+      <!-- Default icon slot (can be overridden) -->
+      <svg class="w-8 h-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+    </slot>
+  </div>
+
+  <h3 class="text-2xl font-bold text-gray-900 mb-4">{servicio.titulo}</h3>
+  <p class="text-gray-600 mb-6">{servicio.descripcion}</p>
+
+  <ul class="space-y-2">
+    {servicio.caracteristicas.map(car => (
+      <li class="flex items-start">
+        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span class="text-gray-700">{car}</span>
+      </li>
+    ))}
+  </ul>
+</div>

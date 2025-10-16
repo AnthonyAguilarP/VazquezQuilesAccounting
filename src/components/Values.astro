@@ -1,0 +1,67 @@
+---
+// src/components/NuestrosValores.astro
+import { Icon } from 'astro-icon/components';
+import { loadLocaleSync } from '../utils/i18n';
+
+const { lang = 'es', locale: propLocale } = Astro.props as { lang?: string, locale?: Record<string,string> };
+const locale = propLocale ?? loadLocaleSync(lang as any);
+
+// Define services/values in Spanish and English. Pick the correct set based on `lang`.
+const serviciosYValoresEs = [
+  { servicio: 'Siempre con', valor: 'Integridad', descripcion: 'Para garantizar transparencia y confianza en cada informe.', icono: 'mdi:web' },
+  { servicio: 'Absoluta', valor: 'Precisión', descripcion: 'Porque cada detalle importa en la toma de decisiones.', icono: 'mdi:chart-line' },
+  { servicio: 'Verdadero', valor: 'Compromiso', descripcion: 'Reflejado en nuestro acompañamiento constante a cada cliente.', icono: 'mdi:headset' },
+  { servicio: 'Garantizamos', valor: 'Confidencialidad', descripcion: 'Nuestra discreción es parte de la confianza que construimos día a día.', icono: 'mdi:palette' },
+  { servicio: 'Buscamos la', valor: 'Innovación', descripcion: 'En nuestra empresa, evolucionar es parte del compromiso.', icono: 'mdi:account-group-outline' },
+  { servicio: 'Siempre con', valor: 'Responsabilidad', descripcion: 'No es solo hacer lo correcto, es anticiparnos a los desafíos y actuar con profesionalismo en cada paso.', icono: 'mdi:account-group-outline' }
+];
+
+const serviciosYValoresEn = [
+  { servicio: 'Always with', valor: 'Integrity', descripcion: 'To guarantee transparency and trust in every report.', icono: 'mdi:web' },
+  { servicio: 'Absolute', valor: 'Precision', descripcion: 'Because every detail matters when making decisions.', icono: 'mdi:chart-line' },
+  { servicio: 'True', valor: 'Commitment', descripcion: 'Reflected in our constant support for every client.', icono: 'mdi:headset' },
+  { servicio: 'We guarantee', valor: 'Confidentiality', descripcion: 'Our discretion is part of the trust we build day by day.', icono: 'mdi:palette' },
+  { servicio: 'We seek', valor: 'Innovation', descripcion: 'In our company, evolving is part of the commitment.', icono: 'mdi:account-group-outline' },
+  { servicio: 'Always with', valor: 'Responsibility', descripcion: "It's not just doing the right thing; it's anticipating challenges and acting professionally every step of the way.", icono: 'mdi:account-group-outline' }
+];
+
+const serviciosYValores = (lang === 'en') ? serviciosYValoresEn : serviciosYValoresEs;
+---
+
+<section class="py-16 sm:py-24 bg-gray-50 dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="text-center mb-12 sm:mb-20">
+      <p class="text-indigo-600 dark:text-indigo-400 font-semibold uppercase tracking-wider text-sm">{locale['values.label'] ?? (lang === 'en' ? 'Our Pillars' : 'Nuestros Pilares')}</p>
+      <h2 class="mt-2 text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
+        {locale['values.title'] ?? (lang === 'en' ? 'Values that Drive Every Service' : 'Valores que Impulsan Cada Servicio')}
+      </h2>
+      <p class="mt-4 text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+        {locale['values.subtitle'] ?? (lang === 'en' ? 'Ethics and dedication define how we work. Discover the values we apply in every solution we offer.' : 'La ética y la dedicación definen cómo trabajamos. Descubre los valores que aplicamos en cada solución que ofrecemos.')}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {serviciosYValores.map((item) => (
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+          
+          <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white mb-4">
+            <Icon name={item.icono} class="w-6 h-6" />
+          </div>
+
+          <h3 class="text-lg font-bold text-indigo-600 dark:text-indigo-400 mb-1 uppercase tracking-wider">
+            {item.servicio}
+          </h3>
+          
+          <h4 class="mt-1 text-2xl font-extrabold text-gray-900 dark:text-white mb-3">
+            {item.valor}
+          </h4>
+          
+          <p class="text-base text-gray-500 dark:text-gray-400">
+            {item.descripcion}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

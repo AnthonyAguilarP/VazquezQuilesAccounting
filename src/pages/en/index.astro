@@ -1,0 +1,58 @@
+---
+import NavBar from '../../components/NavBar.astro';
+import Carousel from '../../components/Carousel.astro';
+import Layout from '../../layouts/Layout.astro';
+import accountingTeam from '../../assets/accounting-team.png';
+import businessConsulting from '../../assets/business-consulting.png';
+import heroBackground from '../../assets/hero-background.png';
+import HeroSection from '../../components/HeroSection.astro';
+import Values from '../../components/Values.astro';
+import CallAction from '../../components/callAction.astro';
+import OurPurpose from '../../components/ourPurpose.astro';
+import Footer from '../../components/footer.astro';
+
+import { loadLocaleSync } from '../../utils/i18n';
+
+const carouselSlides = [
+  {
+    image: accountingTeam,
+    alt: 'A team of accountants working together in a modern office.',
+    title: 'Evaluation and diagnosis',
+    description: 'During an initial meeting we learn about your financial and tax situation.'
+  },
+  {
+    image: businessConsulting,
+    alt: 'A consultant pointing at financial charts on a tablet.',
+    title: 'Execution or optimization',
+    description: 'We manage your business payroll month to month (income, IVU and related flows) to ensure the comprehensive growth of your investment.'
+  },
+]
+
+const meta = {
+  title: 'Home',
+  description: 'Vázquez Quiles Accounting - Accounting, payroll and tax filing services in Puerto Rico. We support businesses and individuals with precision and compliance.',
+  url: 'https://vazquezquilesaccounting.com/en/',
+  image: heroBackground.src,
+  lang: 'en'
+}
+
+const locale = loadLocaleSync(meta.lang as any);
+---
+
+<Layout {...meta} preloadImage={heroBackground.src}>
+    <NavBar lang={meta.lang} locale={locale} />
+    <HeroSection
+      title={locale['home.title'] ?? 'Vazquez Quiles Accounting'}
+      subtitle={locale['home.subtitle'] ?? 'We are the most reliable accounting company in Puerto Rico, providing value and security to payroll and tax filing processes for businesses and individuals on the island.'}
+      primaryCtaText={locale['home.primaryCta'] ?? 'Trusted Accounting for Your Business'}
+      primaryCtaLink={meta.lang === 'en' ? '/en/contacto' : '/contacto'}
+      secondaryCtaText={locale['home.secondaryCta'] ?? 'Explore Our Services'}
+      secondaryCtaLink={meta.lang === 'en' ? '/en/servicios' : '/servicios'}
+      backgroundImage={heroBackground.src}
+    />
+  <Values lang={meta.lang} locale={locale} />
+  <OurPurpose lang={meta.lang} locale={locale} />
+  <CallAction lang={meta.lang} locale={locale} />
+  <Carousel slides={carouselSlides} />
+  <Footer lang={meta.lang} locale={locale} />
+</Layout>

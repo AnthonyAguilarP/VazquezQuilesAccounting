@@ -1,0 +1,126 @@
+---
+export interface Slide {
+  // Accept either a string path (eg. '/image.jpg') or an imported image object { src: string }
+  image: string | { src: string };
+  alt: string;
+  title: string;
+  description: string;
+}
+
+export interface Props {
+  slides: Slide[];
+}
+
+// Explicitly type Astro.props to satisfy TypeScript
+const { slides } = Astro.props as Props;
+---
+
+<div id="carousel-container" class="relative w-full max-w-5xl mx-auto shadow-2xl rounded-lg overflow-hidden my-8">
+  <div id="slider-track" class="flex transition-transform duration-500 ease-in-out">
+    {slides.map((slide, index) => (
+      <div class="carousel-slide w-full flex-shrink-0 relative">
+            <img
+              src={
+                typeof slide.image === 'string'
+                  ? slide.image
+                  : (slide.image && 'src' in slide.image ? slide.image.src : '')
+              }
+              alt={slide.alt}
+              loading="lazy"
+              class="w-full h-64 md:h-96 object-cover"
+              decoding="async"
+              width={1280}
+              height={720}
+              {...({'fetchpriority': 'low'} as any)}
+            />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 p-6 md:p-8 text-white">
+          <h3 class="text-2xl md:text-4xl font-bold drop-shadow-lg">{slide.title}</h3>
+          <p class="mt-2 text-sm md:text-lg max-w-2xl drop-shadow-md">{slide.description}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <button id="prev-button" class="absolute top-1/2 left-3 transform -translate-y-1/2 bg-white/50 hover:bg-white/80 transition-colors rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
+  <button id="next-button" class="absolute top-1/2 right-3 transform -translate-y-1/2 bg-white/50 hover:bg-white/80 transition-colors rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+  </button>
+
+  <div class="absolute bottom-5 left-1/2 -translate-x-1/2 flex space-x-2">
+    {slides.map((_, index) => (
+      <button 
+        class="carousel-dot h-3 w-3 rounded-full transition-colors"
+        data-index={index}
+        aria-label={`Go to slide ${index + 1}`}
+      ></button>
+    ))}
+  </div>
+</div>
+
+<script define:vars={{ slideCount: slides.length }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const sliderTrack = document.getElementById('slider-track');
+    const prevButton = document.getElementById('prev-button');
+    const nextButton = document.getElementById('next-button');
+    const dots = document.querySelectorAll('.carousel-dot');
+    
+    let currentIndex = 0;
+
+    function updateCarousel() {
+      // Move the slider track. Because the track width is set to slideCount * 100%,
+      // each slide occupies (100/slideCount)% of the track, so move by that fraction.
+      const movePercent = currentIndex * (100 / slideCount);
+      sliderTrack.style.transform = `translateX(-${movePercent}%)`;
+
+      // Update active dot
+      dots.forEach((dot, index) => {
+        if (index === currentIndex) {
+          dot.classList.add('bg-white');
+          dot.classList.remove('bg-white/50');
+        } else {
+          dot.classList.add('bg-white/50');
+          dot.classList.remove('bg-white');
+        }
+      });
+    }
+
+    nextButton.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % slideCount;
+      updateCarousel();
+    });
+
+    prevButton.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + slideCount) % slideCount;
+      updateCarousel();
+    });
+    
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        currentIndex = parseInt(dot.dataset.index);
+        updateCarousel();
+      });
+    });
+
+    // Initialize carousel
+    // Ensure track and slide widths are correct for the number of slides
+    if (sliderTrack) {
+      const slideEls = sliderTrack.querySelectorAll('.carousel-slide');
+      sliderTrack.style.width = `${slideCount * 100}%`;
+      slideEls.forEach(el => {
+        // each slide should take an equal portion of the track
+        if (el instanceof HTMLElement) {
+          el.style.width = `${100 / slideCount}%`;
+        }
+      });
+    }
+
+    updateCarousel();
+  });
+</script>

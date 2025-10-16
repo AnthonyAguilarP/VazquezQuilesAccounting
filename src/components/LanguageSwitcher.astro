@@ -1,0 +1,352 @@
+---
+// Language Switcher Component
+// Floating button to switch between Spanish and English
+---
+
+<div id="language-switcher" class="fixed bottom-6 right-6 z-50">
+  <button
+    id="lang-toggle"
+    class="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-2xl transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-blue-300 flex items-center gap-2"
+    aria-label="Cambiar idioma"
+    title="Cambiar idioma / Change language"
+  >
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+    </svg>
+    <span id="current-lang" class="font-semibold text-sm">ES</span>
+  </button>
+
+  <!-- Language selection panel -->
+  <div
+    id="lang-panel"
+    class="absolute bottom-full right-0 mb-3 bg-white rounded-lg shadow-2xl overflow-hidden opacity-0 invisible transition-all duration-300 transform scale-95"
+  >
+    <button
+      data-lang="es"
+      class="lang-option flex items-center gap-3 px-6 py-3 hover:bg-blue-50 transition-colors w-full text-left border-b border-gray-100"
+    >
+      <span class="text-2xl">🇪🇸</span>
+      <div>
+        <div class="font-semibold text-gray-900">Español</div>
+        <div class="text-xs text-gray-500">Spanish</div>
+      </div>
+      <svg class="w-5 h-5 text-blue-600 ml-auto lang-check hidden" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+      </svg>
+    </button>
+    <button
+      data-lang="en"
+      class="lang-option flex items-center gap-3 px-6 py-3 hover:bg-blue-50 transition-colors w-full text-left"
+    >
+      <span class="text-2xl">🇺🇸</span>
+      <div>
+        <div class="font-semibold text-gray-900">English</div>
+        <div class="text-xs text-gray-500">Inglés</div>
+      </div>
+      <svg class="w-5 h-5 text-blue-600 ml-auto lang-check hidden" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  // Prefer server-provided locales if available (injected by Layout)
+  const localesFromServer = (typeof window !== 'undefined' && (window as any).__LOCALES__) ? (window as any).__LOCALES__ : null;
+
+  // Fallback inline dictionary (small) if server locales unavailable
+  const fallback = {
+    es: {
+      'nav.home': 'Inicio',
+      'nav.services': 'Servicios',
+      'nav.contact': 'Contacto',
+      'home.title': 'Vazquez Quiles Accounting',
+      'home.subtitle': 'Somos la compañía de contabilidad más confiable en todo Puerto Rico, aportando valor y seguridad a los procesos de planillas y nóminas de los negocios e individuos en la isla.',
+      'services.title': 'Nuestros Servicios',
+      'services.subtitle': 'Soluciones contables integrales diseñadas para el éxito de tu negocio en Puerto Rico',
+      'services.ctaTitle': '¿Listo para optimizar tus finanzas?',
+      'services.ctaBody': 'Contáctanos hoy y descubre cómo podemos ayudarte a alcanzar tus objetivos financieros',
+      'services.ctaButton': 'Solicitar Consulta Gratuita',
+      'form.name': 'Nombre completo',
+      'form.email': 'Correo electrónico',
+      'form.phone': 'Teléfono',
+      'form.service': 'Servicio de interés',
+      'form.message': 'Mensaje'
+    },
+    en: {
+      'nav.home': 'Home',
+      'nav.services': 'Services',
+      'nav.contact': 'Contact',
+      'home.title': 'Vazquez Quiles Accounting',
+      'home.subtitle': 'We are the most reliable accounting company in all of Puerto Rico, providing value and security to the payroll and tax filing processes for businesses and individuals on the island.',
+      'services.title': 'Our Services',
+      'services.subtitle': 'Comprehensive accounting solutions designed for your business success in Puerto Rico',
+      'services.ctaTitle': 'Ready to optimize your finances?',
+      'services.ctaBody': 'Contact us today and discover how we can help you achieve your financial goals',
+      'services.ctaButton': 'Request Free Consultation',
+      'form.name': 'Full name',
+      'form.email': 'Email',
+      'form.phone': 'Phone',
+      'form.service': 'Service of interest',
+      'form.message': 'Message'
+    }
+  };
+
+  function getLocales() {
+    return localesFromServer || fallback;
+  }
+
+  function t(key: string, lang: string) {
+    const locales = getLocales();
+    const bucket = (locales && locales[lang]) ? locales[lang] as Record<string, string> : {} as Record<string,string>;
+    // Support both nested keys (nav.home) and plain strings
+    return bucket[key] ?? bucket[key.split('.').slice(-1)[0]] ?? key;
+  }
+
+  // Initialize language system
+  class LanguageManager {
+    // current language code
+    currentLang = 'es';
+    constructor() {
+          // Determine initial language. We want the user's saved preference to be
+          // respected across visits. Priority changed to:
+          // 1. URL path (/en prefix)
+          // 2. saved localStorage preferred-lang
+          // 3. server-provided window.__LANG__
+          const pathLang = (typeof window !== 'undefined' && window.location && window.location.pathname.startsWith('/en')) ? 'en' : null;
+          const serverLang = (typeof window !== 'undefined' && (window as any).__LANG__) ? (window as any).__LANG__ : null;
+          const stored = (typeof window !== 'undefined') ? localStorage.getItem('preferred-lang') : null;
+
+          // If the user has a stored preference and it conflicts with the current
+          // path/server language, prefer the stored value and navigate to the
+          // matching route so that server-rendered pages reflect the choice.
+          const currentPath = (typeof window !== 'undefined') ? window.location.pathname : '/';
+          const desired = pathLang || stored || serverLang || 'es';
+
+          // If we need to change the route to match the stored preference, do it
+          // only when storage exists but the path doesn't indicate a language AND
+          // the stored preference is set. However, avoid forcing a navigation if
+          // a stored preference already exists that was explicitly set earlier
+          // — we don't want to bounce users back unexpectedly. So only auto-redirect
+          // when there is NO stored preference (first-visit) and the pathLang differs.
+          if (!pathLang && !stored) {
+            if (serverLang && serverLang !== pathLang) {
+              // if server suggested a language (rare) and path doesn't indicate, prefer server
+            }
+            // no stored preference: choose desired and possibly redirect to match
+            if (desired === 'en' && !currentPath.startsWith('/en')) {
+              const target = '/en' + (currentPath === '/' ? '/' : currentPath);
+              try { localStorage.setItem('preferred-lang', 'en'); } catch (e) {}
+              window.location.assign(target);
+              return;
+            } else if (desired === 'es' && currentPath.startsWith('/en')) {
+              const target = currentPath.replace(/^\/en/, '') || '/';
+              try { localStorage.setItem('preferred-lang', 'es'); } catch (e) {}
+              window.location.assign(target);
+              return;
+            }
+          }
+
+          this.currentLang = desired;
+          // If pathname indicates English but storage differs, keep URL priority and update storage
+          if (pathLang && stored !== 'en') localStorage.setItem('preferred-lang', 'en');
+          this.init();
+      }
+
+    init() {
+      this.updateUI();
+      this.attachEventListeners();
+      // Cache original text nodes to allow reversible translations
+      this.cacheOriginalTexts();
+      this.translatePage(this.currentLang);
+    }
+
+    attachEventListeners() {
+      // Use event delegation so handlers keep working after Astro partial navigations
+      // and avoid attaching multiple times across navigations.
+      if ((window as any).__langSwitcherBound) return;
+
+      document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const panel = document.getElementById('lang-panel');
+        const switcher = document.getElementById('language-switcher');
+
+        // Toggle button clicked
+        if (target.closest && target.closest('#lang-toggle')) {
+          const isVisible = !panel?.classList.contains('invisible');
+          if (isVisible) {
+            panel?.classList.add('invisible', 'opacity-0', 'scale-95');
+          } else {
+            panel?.classList.remove('invisible', 'opacity-0', 'scale-95');
+          }
+          return;
+        }
+
+        // Language option clicked
+        const opt = target.closest && target.closest('.lang-option') as HTMLElement | null;
+        if (opt && opt.getAttribute) {
+          const lang = opt.getAttribute('data-lang');
+          if (lang) {
+            // Navigate to localized routes: English uses /en prefix, Spanish is default (no prefix)
+            const currentPath = window.location.pathname;
+            if (lang === 'en') {
+              // if already on /en, stay; else prefix with /en
+              if (!currentPath.startsWith('/en')) {
+                const target = '/en' + (currentPath === '/' ? '/' : currentPath);
+                // persist preference then navigate; use location.assign so history is preserved reliably
+                try { localStorage.setItem('preferred-lang', 'en'); } catch (e) {}
+                window.location.assign(target);
+                return;
+              }
+            } else if (lang === 'es') {
+              // if on /en, remove prefix
+              if (currentPath.startsWith('/en')) {
+                const target = currentPath.replace(/^\/en/, '') || '/';
+                try { localStorage.setItem('preferred-lang', 'es'); } catch (e) {}
+                window.location.assign(target);
+                return;
+              }
+            }
+
+            // If route doesn't change (already on correct language path), persist and apply
+            this.setLanguage(lang);
+            panel?.classList.add('invisible', 'opacity-0', 'scale-95');
+          }
+          return;
+        }
+
+        // Click outside the switcher -> hide panel
+        if (switcher && !switcher.contains(e.target as Node)) {
+          panel?.classList.add('invisible', 'opacity-0', 'scale-95');
+        }
+      });
+
+      (window as any).__langSwitcherBound = true;
+    }
+
+    // Called when the client navigates to a new page (Astro partial navigation)
+    handlePageLoad() {
+      // Re-cache originals for the newly loaded DOM
+      this.cacheOriginalTexts();
+      // Re-apply the selected language
+      this.translatePage(this.currentLang);
+      // Update UI state (checkmarks, button label)
+      this.updateUI();
+      // Ensure event listeners are attached (idempotent)
+      this.attachEventListeners();
+    }
+
+    setLanguage(lang: string) {
+      this.currentLang = lang;
+      localStorage.setItem('preferred-lang', lang);
+      this.updateUI();
+      this.translatePage(lang);
+    }
+
+    updateUI() {
+      const currentLangEl = document.getElementById('current-lang');
+      if (currentLangEl) {
+        currentLangEl.textContent = this.currentLang.toUpperCase();
+      }
+
+      // Update checkmarks
+      document.querySelectorAll('.lang-check').forEach(check => {
+        check.classList.add('hidden');
+      });
+      const activeOption = document.querySelector(`[data-lang="${this.currentLang}"] .lang-check`);
+      activeOption?.classList.remove('hidden');
+    }
+
+    translatePage(lang: string) {
+      const locales = getLocales();
+      const dictionary = (locales && locales[lang]) ? locales[lang] as Record<string,string> : {} as Record<string,string>;
+
+      // Translate elements that use explicit data-translate keys (these should be keys like 'nav.home')
+      document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate') || '';
+        if (key && dictionary[key]) {
+          element.textContent = dictionary[key];
+        }
+      });
+
+      // Translate elements that had their original text cached in data-orig-text
+      document.querySelectorAll('[data-orig-text]').forEach(element => {
+        const key = element.getAttribute('data-orig-text') || '';
+        if (key && dictionary[key]) {
+          element.textContent = dictionary[key];
+        }
+      });
+    }
+
+    translateByTextContent(dictionary: Record<string, string>) {
+      // Deprecated: translations by matching current text are brittle and can break reversibility.
+      // This function is kept for backward-compat but does nothing now.
+      return;
+    }
+
+    // Walk the DOM and cache original text content into data-orig-text attributes so
+    // translations are reversible even after textContent changes.
+    cacheOriginalTexts() {
+      try {
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT, null as any);
+        let node = walker.nextNode();
+        while (node) {
+          const el = node as HTMLElement;
+          // Skip script/style/code elements
+          if (['SCRIPT', 'STYLE', 'CODE'].includes(el.tagName)) {
+            node = walker.nextNode();
+            continue;
+          }
+
+          // If element has no child elements and has meaningful text, cache it
+          if (el.children.length === 0) {
+            const text = el.textContent?.trim();
+            if (text && text.length > 0 && text.length < 200) {
+              if (!el.hasAttribute('data-translate') && !el.hasAttribute('data-orig-text')) {
+                el.setAttribute('data-orig-text', text);
+              }
+            }
+          }
+
+          node = walker.nextNode();
+        }
+      } catch (err) {
+        // fail silently
+        // console.warn('cacheOriginalTexts failed', err);
+      }
+    }
+  }
+
+  // Initialize on page load
+  if (typeof window !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+      const manager = new LanguageManager();
+      // Listen for Astro partial navigations and re-apply translations
+      document.addEventListener('astro:page-load', () => {
+        try {
+          manager.handlePageLoad();
+        } catch (err) {
+          // ignore
+        }
+      });
+    });
+  }
+</script>
+
+<style>
+  @keyframes pulse-ring {
+    0% {
+      box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(37, 99, 235, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+    }
+  }
+
+  #lang-toggle:hover {
+    animation: pulse-ring 1.5s infinite;
+  }
+</style>

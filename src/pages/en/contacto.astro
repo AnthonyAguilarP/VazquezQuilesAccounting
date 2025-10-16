@@ -1,0 +1,102 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import NavBar from '../../components/NavBar.astro';
+import Footer from '../../components/footer.astro';
+import AnimatedSection from '../../components/AnimatedSection.astro';
+import HeroContact from '../../components/HeroContact.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import ContactInfo from '../../components/ContactInfo.astro';
+import WhyChooseUs from '../../components/WhyChooseUs.astro';
+import { loadLocaleSync } from '../../utils/i18n';
+
+const meta = {
+  title: 'Contact',
+  description: "Contact V\u00e1zquez Quiles Accounting for inquiries about accounting, payroll and tax filing. Schedule a consultation today.",
+  url: 'https://vazquezquilesaccounting.com/en/contacto',
+  image: '/logo.png',
+  lang: 'en'
+}
+
+const locale = loadLocaleSync(meta.lang as any);
+---
+
+<Layout {...meta}>
+  <NavBar lang={meta.lang} locale={locale} />
+  
+  <HeroContact lang={meta.lang} locale={locale} />
+
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        
+        <!-- Contact Form -->
+        <AnimatedSection animation="slide-right" delay={0.2}>
+          <ContactForm lang={meta.lang} locale={locale} />
+        </AnimatedSection>
+
+        <!-- Contact Information -->
+        <div class="space-y-8">
+          <AnimatedSection animation="slide-left" delay={0.3}>
+            <ContactInfo lang={meta.lang} locale={locale} />
+          </AnimatedSection>
+
+          <!-- Map or Additional Info -->
+          <AnimatedSection animation="slide-left" delay={0.5}>
+            <WhyChooseUs lang={meta.lang} locale={locale} />
+          </AnimatedSection>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer lang={meta.lang} locale={locale} />
+</Layout>
+
+  <script>
+    (function () {
+      const formEl = document.getElementById('contact-form');
+      if (!formEl) return;
+      const form = /** @type {HTMLFormElement} */ (formEl);
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const nombreEl = form.querySelector('#nombre');
+        const emailEl = form.querySelector('#email');
+        const telefonoEl = form.querySelector('#telefono');
+        const servicioEl = form.querySelector('#servicio');
+        const mensajeEl = form.querySelector('#mensaje');
+
+        const data = {
+          nombre: (nombreEl instanceof HTMLInputElement) ? nombreEl.value : '',
+          email: (emailEl instanceof HTMLInputElement) ? emailEl.value : '',
+          telefono: (telefonoEl instanceof HTMLInputElement) ? telefonoEl.value : '',
+          servicio: (servicioEl instanceof HTMLSelectElement) ? servicioEl.value : '',
+          mensaje: (mensajeEl instanceof HTMLTextAreaElement) ? mensajeEl.value : ''
+        };
+
+        try {
+          const res = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          const body = await res.json();
+              if (res.ok && body.success) {
+                alert('Thanks for your message! We will contact you soon.');
+                if (nombreEl instanceof HTMLInputElement) nombreEl.value = '';
+                if (emailEl instanceof HTMLInputElement) emailEl.value = '';
+                if (telefonoEl instanceof HTMLInputElement) telefonoEl.value = '';
+                if (servicioEl instanceof HTMLSelectElement) servicioEl.selectedIndex = 0;
+                if (mensajeEl instanceof HTMLTextAreaElement) mensajeEl.value = '';
+              } else {
+            alert('There was an error sending your message. Please try again later.');
+          }
+        } catch (err) {
+          console.error('Error sending contact form', err);
+          alert('There was an error sending your message. Please try again later.');
+        }
+      });
+    })();
+  </script>

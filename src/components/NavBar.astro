@@ -1,0 +1,70 @@
+---
+import { loadLocaleSync } from '../utils/i18n';
+
+const { lang = 'es' } = Astro.props as { lang?: string };
+const locale = loadLocaleSync(lang as any);
+---
+
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      
+      <div class="flex-shrink-0">
+        <a href="/" class="flex items-center space-x-2">
+          <img src="/logo.png" alt="Vázquez Quiles Accounting logo" class="h-10 w-10 object-contain" width={40} height={40} loading="eager" decoding="async" />
+          <span class="font-bold text-xl text-gray-800">Vázquez Quiles Accounting</span>
+        </a>
+      </div>
+
+      <div class="hidden md:block">
+        <div class="ml-10 flex items-baseline space-x-8">
+          <a href={lang === 'en' ? '/en/' : '/'} rel="prefetch" data-prefetch="intent" class="text-gray-600 hover:text-blue-600 font-medium transition-colors duration-300">{locale['nav.home'] ?? 'Inicio'}</a>
+          <a href={lang === 'en' ? '/en/servicios' : '/servicios'} rel="prefetch" data-prefetch="intent" class="text-gray-600 hover:text-blue-600 font-medium transition-colors duration-300">{locale['nav.services'] ?? 'Servicios'}</a>
+          <a href={lang === 'en' ? '/en/contacto' : '/contacto'} rel="prefetch" data-prefetch="intent" class="text-gray-600 hover:text-blue-600 font-medium transition-colors duration-300">{locale['nav.contact'] ?? 'Contacto'}</a>
+        </div>
+      </div>
+
+      <div class="md:hidden flex items-center">
+        <button id="hamburger-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
+          <span class="sr-only">abrir menu</span>
+          <svg id="hamburger-icon" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-4 6h4" />
+          </svg>
+          <svg id="close-icon" class="h-6 w-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+      <div class="hidden md:hidden" id="mobile-menu">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+      <a href={lang === 'en' ? '/en/' : '/'} rel="prefetch" data-prefetch="intent" class="text-gray-700 hover:bg-blue-50 block px-3 py-2 rounded-md text-base font-medium">{locale['nav.home'] ?? 'Inicio'}</a>
+      <a href={lang === 'en' ? '/en/servicios' : '/servicios'} rel="prefetch" data-prefetch="intent" class="text-gray-700 hover:bg-blue-50 block px-3 py-2 rounded-md text-base font-medium">{locale['nav.services'] ?? 'Servicios'}</a>
+      <a href={lang === 'en' ? '/en/contacto' : '/contacto'} rel="prefetch" data-prefetch="intent" class="text-gray-700 hover:bg-blue-50 block px-3 py-2 rounded-md text-base font-medium">{locale['nav.contact'] ?? 'Contacto'}</a>
+    </div>
+  </div>
+</nav>
+
+<script>
+  const hamburgerButton = document.getElementById('hamburger-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const hamburgerIcon = document.getElementById('hamburger-icon');
+  const closeIcon = document.getElementById('close-icon');
+
+  // Guard against null if script runs in environments where elements are not present
+  if (hamburgerButton && mobileMenu && hamburgerIcon && closeIcon) {
+    hamburgerButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      hamburgerIcon.classList.toggle('hidden');
+      closeIcon.classList.toggle('hidden');
+      
+      // Toggle aria-expanded attribute for accessibility
+      const isExpanded = hamburgerButton.getAttribute('aria-expanded') === 'true';
+      // setAttribute expects a string, so convert the boolean to string
+      hamburgerButton.setAttribute('aria-expanded', String(!isExpanded));
+    });
+  }
+</script>

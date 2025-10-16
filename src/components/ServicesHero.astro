@@ -1,0 +1,20 @@
+---
+import AnimatedSection from './AnimatedSection.astro';
+import { loadLocaleSync } from '../utils/i18n';
+
+const { lang = 'es', locale: propLocale } = Astro.props as { lang?: string, locale?: Record<string,string> };
+const locale = propLocale ?? loadLocaleSync(lang as any);
+---
+
+<section class="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <AnimatedSection animation="fade" delay={0.2}>
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-6">{locale['services.title'] ?? 'Nuestros Servicios'}</h1>
+    </AnimatedSection>
+    <AnimatedSection animation="slide-up" delay={0.4}>
+      <p class="text-xl md:text-2xl max-w-3xl mx-auto text-blue-100">
+        {locale['services.subtitle'] ?? 'Soluciones contables integrales diseñadas para el éxito de tu negocio en Puerto Rico'}
+      </p>
+    </AnimatedSection>
+  </div>
+</section>

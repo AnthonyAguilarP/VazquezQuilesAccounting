@@ -1,0 +1,71 @@
+---
+// src/components/CitaPacioliBrand.astro
+import pacioliImg from '../assets/pacioli.jpg?url';
+import { loadLocaleSync } from '../utils/i18n';
+
+const { lang = 'es', locale: propLocale } = Astro.props as { lang?: string, locale?: Record<string,string> };
+const locale = propLocale ?? loadLocaleSync(lang as any);
+
+// Datos para la cita y la imagen de Luca Pacioli
+const citaEs = {
+  cita: 'La contabilidad es una de las más nobles invenciones del espíritu humano.',
+  autor: 'Luca Pacioli',
+  cargo: 'Padre de la Contabilidad Moderna',
+  imageSrc: pacioliImg,
+  imagenAlt: 'Retrato de Luca Pacioli, el padre de la contabilidad moderna',
+  fondoColor: 'bg-gray-50 dark:bg-gray-900',
+  textColor: 'text-gray-900 dark:text-white',
+  citaColor: 'text-indigo-600 dark:text-indigo-400'
+};
+
+const citaEn = {
+  cita: 'Accounting is one of the noblest inventions of the human spirit.',
+  autor: 'Luca Pacioli',
+  cargo: 'Father of Modern Accounting',
+  imageSrc: pacioliImg,
+  imagenAlt: 'Portrait of Luca Pacioli, the father of modern accounting',
+  fondoColor: 'bg-gray-50 dark:bg-gray-900',
+  textColor: 'text-gray-900 dark:text-white',
+  citaColor: 'text-indigo-600 dark:text-indigo-400'
+};
+
+const citaData = (lang === 'en') ? citaEn : citaEs;
+---
+
+<section class={`py-16 sm:py-24 ${citaData.fondoColor}`}>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="lg:flex lg:items-center lg:gap-x-10">
+      
+      <div class="lg:flex-shrink-0 lg:max-w-md w-full mb-10 lg:mb-0">
+        <div class="aspect-w-3 aspect-h-4 rounded-3xl overflow-hidden shadow-2xl ring-4 ring-indigo-500 dark:ring-indigo-700">
+          
+          <img
+            class="object-cover w-full h-full transform hover:scale-105 transition duration-500 ease-in-out"
+            src={citaData.imageSrc}
+              alt={citaData.imagenAlt}
+            width="400" 
+            height="533" 
+            loading="lazy"
+          />
+        </div>
+      </div>
+
+      <div class="text-center lg:text-left lg:flex-grow">
+        <p class={`text-base font-semibold ${citaData.citaColor} uppercase tracking-wide mb-3`}>
+          {locale['brand.inspiration'] ?? 'Inspiración'}
+        </p>
+        <blockquote class="text-3xl sm:text-4xl font-extrabold leading-tight tracking-tight ${citaData.textColor}">
+          &#8220;{citaData.cita}&#8221;
+        </blockquote>
+        <p class={`mt-8 text-xl font-semibold ${citaData.citaColor}`}>
+          {citaData.autor}
+        </p>
+        <p class="mt-2 text-lg text-gray-500 dark:text-gray-400">
+          {citaData.cargo}
+        </p>
+      </div>
+    </div>
+    
+  </div>
+</section>

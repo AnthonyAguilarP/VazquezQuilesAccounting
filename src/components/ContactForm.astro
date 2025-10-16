@@ -1,0 +1,182 @@
+---
+import { loadLocaleSync } from '../utils/i18n';
+
+const { lang = 'es', locale: propLocale } = Astro.props as { lang?: string, locale?: Record<string,string> };
+const locale = propLocale ?? loadLocaleSync(lang as any);
+
+const labels = {
+  title: locale['form.title'] ?? (lang === 'en' ? 'Send us a message' : 'Envíanos un mensaje'),
+  subtitle: locale['form.subtitle'] ?? (lang === 'en' ? 'We are here to help with your accounting needs' : 'Estamos aquí para ayudarte con tus necesidades contables'),
+  name: locale['form.name'] ?? (lang === 'en' ? 'Full name' : 'Nombre completo'),
+  email: locale['form.email'] ?? (lang === 'en' ? 'Email' : 'Correo electrónico'),
+  phone: locale['form.phone'] ?? (lang === 'en' ? 'Phone' : 'Teléfono'),
+  service: locale['form.service'] ?? (lang === 'en' ? 'Service of interest' : 'Servicio de interés'),
+  message: locale['form.message'] ?? (lang === 'en' ? 'Message' : 'Mensaje'),
+  selectService: locale['form.selectService'] ?? (lang === 'en' ? 'Select a service' : 'Selecciona un servicio'),
+  option_contabilidad: locale['form.service.contabilidad'] ?? (lang === 'en' ? 'Business Accounting' : 'Contabilidad de Negocios'),
+  option_planillas: locale['form.service.planillas'] ?? (lang === 'en' ? 'Tax Return Preparation' : 'Preparación de Planillas'),
+  option_nomina: locale['form.service.nomina'] ?? (lang === 'en' ? 'Payroll & HR' : 'Nómina y Recursos Humanos'),
+  option_consultoria: locale['form.service.consultoria'] ?? (lang === 'en' ? 'Financial Consulting' : 'Consultoría Financiera'),
+  option_auditoria: locale['form.service.auditoria'] ?? (lang === 'en' ? 'Internal Audit' : 'Auditoría Interna'),
+  option_ivu: locale['form.service.ivu'] ?? (lang === 'en' ? 'IVU Services' : 'Servicios de IVU'),
+  option_otro: locale['form.service.otro'] ?? (lang === 'en' ? 'Other' : 'Otro'),
+  submit: locale['form.send'] ?? (lang === 'en' ? 'Send Message' : 'Enviar Mensaje'),
+  sending: (lang === 'en' ? 'Sending...' : 'Enviando...'),
+  success: (lang === 'en' ? 'Message sent successfully! Thanks, we will reply soon.' : '\u00a1Mensaje enviado exitosamente! Gracias, te responderemos pronto.'),
+  error_generic: (lang === 'en' ? 'Error sending the message. Please try again later.' : 'Error al enviar el mensaje. Por favor intenta más tarde.'),
+  error_conn: (lang === 'en' ? 'Connection error. Check your internet and try again.' : 'Error de conexión. Verifica tu internet e intenta nuevamente.'),
+  developer_by: (lang === 'en' ? 'Website developed and supported by' : 'Sitio web desarrollado y soportado por'),
+  agency: (lang === 'en' ? 'Digital Marketing Agency' : 'Agencia de Marketing Digital')
+};
+
+---
+
+<div id="contact-form-wrapper" data-form-labels={JSON.stringify(labels)} class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8 border border-blue-200">
+  <!-- Header -->
+  <div class="text-center mb-6 sm:mb-8">
+    <div class="flex justify-center mb-4">
+      <img src="/logo.png" alt="Vázquez Quiles Accounting Logo" class="h-16 w-auto sm:h-20 lg:h-24 object-contain" width="160" height="160" loading="eager" decoding="async" />
+    </div>
+    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-900 mb-2">{labels.title}</h2>
+    <p class="text-blue-700 text-sm sm:text-base">{labels.subtitle}</p>
+  </div>
+
+  <form class="space-y-4 sm:space-y-6" id="contact-form" novalidate>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+      <div>
+        <label for="nombre" class="block text-sm font-semibold text-blue-800 mb-2">{labels.name} *</label>
+        <input type="text" id="nombre" name="nombre" required aria-required="true" placeholder={lang === 'en' ? 'John Doe' : 'Juan Pérez'}
+          class="w-full px-4 py-3 border-2 border-blue-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 bg-white/70 backdrop-blur-sm text-blue-900 placeholder-blue-400" />
+      </div>
+
+      <div>
+        <label for="email" class="block text-sm font-semibold text-blue-800 mb-2">{labels.email} *</label>
+        <input type="email" id="email" name="email" required aria-required="true" placeholder={lang === 'en' ? 'john@example.com' : 'juan@ejemplo.com'}
+          class="w-full px-4 py-3 border-2 border-blue-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 bg-white/70 backdrop-blur-sm text-blue-900 placeholder-blue-400" />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+      <div>
+        <label for="telefono" class="block text-sm font-semibold text-blue-800 mb-2">{labels.phone}</label>
+        <input type="tel" id="telefono" name="telefono" placeholder="(787) 123-4567"
+          class="w-full px-4 py-3 border-2 border-blue-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 bg-white/70 backdrop-blur-sm text-blue-900 placeholder-blue-400" />
+      </div>
+
+      <div>
+        <label for="servicio" class="block text-sm font-semibold text-blue-800 mb-2">{labels.service}</label>
+        <select id="servicio" name="servicio" class="w-full px-4 py-3 border-2 border-blue-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 bg-white/70 backdrop-blur-sm text-blue-900">
+          <option value="">{labels.selectService}</option>
+          <option value="contabilidad">{labels.option_contabilidad}</option>
+          <option value="planillas">{labels.option_planillas}</option>
+          <option value="nomina">{labels.option_nomina}</option>
+          <option value="consultoria">{labels.option_consultoria}</option>
+          <option value="auditoria">{labels.option_auditoria}</option>
+          <option value="ivu">{labels.option_ivu}</option>
+          <option value="otro">{labels.option_otro}</option>
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <label for="mensaje" class="block text-sm font-semibold text-blue-800 mb-2">{labels.message} *</label>
+      <textarea id="mensaje" name="mensaje" rows="5" required aria-required="true" placeholder={lang === 'en' ? 'Tell us how we can help you...' : 'Cuéntanos cómo podemos ayudarte...'}
+        class="w-full px-4 py-3 border-2 border-blue-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 resize-none bg-white/70 backdrop-blur-sm text-blue-900 placeholder-blue-400"></textarea>
+    </div>
+
+    <div class="pt-2">
+      <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 focus:ring-4 focus:ring-blue-300 text-lg" aria-live="polite">
+        <span class="flex items-center justify-center space-x-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+          </svg>
+          <span>{labels.submit}</span>
+        </span>
+      </button>
+    </div>
+  </form>
+
+  <div class="mt-6 pt-4 border-t border-blue-200 text-center">
+    <p class="text-xs sm:text-sm text-blue-600 mb-2">{labels.developer_by}</p>
+    <a href="https://colibrisearcher.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2 text-blue-700 hover:text-blue-800 font-semibold transition-colors duration-200">
+      <span class="text-sm sm:text-base">ColibriSearcher</span>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+      </svg>
+    </a>
+    <p class="text-xs text-blue-500 mt-1">{labels.agency}</p>
+  </div>
+</div>
+
+<script>
+(() => {
+  // Read injected labels from the wrapper's data attribute
+  const wrapper = document.getElementById('contact-form-wrapper');
+  const __FORM_LABELS__ = wrapper && wrapper.getAttribute('data-form-labels') ? JSON.parse(wrapper.getAttribute('data-form-labels') as string) : {} as Record<string,string>;
+
+  const form = document.querySelector<HTMLFormElement>('#contact-form');
+  if (!form) return;
+
+  function createNotification(message: string, isSuccess = true) {
+    const el = document.createElement('div');
+    el.className = `fixed top-4 left-1/2 -translate-x-1/2 z-50 p-4 rounded-xl shadow-2xl transform transition-all duration-300 opacity-0 ${isSuccess ? 'bg-gradient-to-r from-green-500 to-green-600 text-white' : 'bg-gradient-to-r from-red-500 to-red-600 text-white'}`;
+    el.setAttribute('role', 'status');
+    el.innerHTML = `
+      <div class="flex items-start space-x-3">
+        <div class="flex-shrink-0">${isSuccess ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' : '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>'}</div>
+        <div class="flex-1"><p class="font-semibold text-sm sm:text-base">${message}</p></div>
+        <button type="button" aria-label="Cerrar" class="flex-shrink-0 ml-3 close-notice">&times;</button>
+      </div>
+    `;
+
+    document.body.appendChild(el);
+    // Force a frame so transitions can run
+    requestAnimationFrame(() => { el.classList.remove('opacity-0'); el.style.opacity = '1'; });
+
+    const closeBtn = el.querySelector('.close-notice') as HTMLButtonElement | null;
+    if (closeBtn) closeBtn.addEventListener('click', () => el.remove());
+
+    setTimeout(() => { if (el.parentNode) el.remove(); }, 6000);
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+    if (!submitBtn) return;
+
+    const originalDisabled = submitBtn.disabled;
+    submitBtn.disabled = true;
+
+    const originalContent = submitBtn.innerHTML;
+  submitBtn.innerHTML = `<span class="flex items-center justify-center space-x-2"><svg class="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle></svg><span>${__FORM_LABELS__.sending}</span></span>`;
+
+    const formData = new FormData(form as HTMLFormElement);
+    const payload = Object.fromEntries(formData.entries());
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const json = await res.json().catch(() => ({}));
+      if (res.ok && json.success) {
+  createNotification(`${__FORM_LABELS__.success}`, true);
+        (form as HTMLFormElement).reset();
+      } else if (json && json.error) {
+  createNotification(json.error || `${__FORM_LABELS__.error_generic}`, false);
+      } else {
+  createNotification(`${__FORM_LABELS__.error_generic}`, false);
+      }
+    } catch (err) {
+      console.error('Contact submit error', err);
+  createNotification(`${__FORM_LABELS__.error_conn}`, false);
+    } finally {
+      submitBtn.disabled = originalDisabled;
+      submitBtn.innerHTML = originalContent;
+    }
+  });
+})();
+</script>
