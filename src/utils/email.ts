@@ -3,6 +3,9 @@ import type { SendMailOptions } from 'nodemailer';
 import path from 'path';
 import fs from 'fs';
 
+// Load environment variables
+import 'dotenv/config';
+
 const SITE_URL = 'https://vazquezquilesaccounting.com';
 const LOGO_URL = 'https://vazquez-quiles-accounting-mrlegz5h4-anthonyaguilarps-projects.vercel.app/logo.png';
 
@@ -16,13 +19,15 @@ const EMAIL_CONFIG = {
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
-    user: process.env.MAILER_USER || 'mailercolibri@gmail.com',
-    pass: process.env.MAILER_PASS || '' // Use environment variable for password
-  }
+    user: process.env.MAILER_USER,
+    pass: process.env.MAILER_PASS?.replace(/\s/g, '') // Remover espacios de la contraseña
+  },
+  debug: false, // Set to true for debugging
+  logger: false
 };
 
 // Create transporter
-export const transporter = nodemailer.createTransporter(EMAIL_CONFIG);
+export const transporter = nodemailer.createTransport(EMAIL_CONFIG);
 
 // Email addresses
 export const BUSINESS_EMAILS = [
@@ -163,4 +168,60 @@ export const generateBusinessNotificationEmail = (data: {
       </div>
     `
   };
+};
+
+// Función principal para enviar emails
+export const sendContactEmail = async (data: {
+  nombre: string;
+  email: string;
+  telefono?: string;
+  servicio?: string;
+  mensaje: string;
+}) => {
+  try {
+    // Verificar la conexión del transportador
+    await transporter.verify();
+    console.log('✅ Servidor SMTP conectado correctamente');
+
+    // Generar los emails
+    const userEmail = generateUserConfirmationEmail(data);
+    const businessEmail = generateBusinessNotificationEmail(data);
+
+    // Enviar email de confirmación al usuario
+    const userResult = await transporter.sendMail(userEmail);
+    console.log('✅ Email de confirmación enviado al usuario:', userResult.messageId);
+
+    // Enviar notificación al negocio
+    const businessResult = await transporter.sendMail(businessEmail);
+    console.log('✅ Email de notificación enviado al negocio:', businessResult.messageId);
+
+    return {
+      success: true,
+      message: 'Emails enviados correctamente',
+      userMessageId: userResult.messageId,
+      businessMessageId: businessResult.messageId
+    };
+  } catch (error) {
+    console.error('❌ Error enviando emails:', error);
+    throw new Error(`Error al enviar email: ${error instanceof Error ? error.message : 'Error desconocido'}`);
+  }
+};
+
+// Función para enviar email personalizado
+export const sendCustomEmail = async (options: SendMailOptions) => {
+  try {
+    await transporter.verify();
+    const result = await transporter.sendMail({
+      from: 'mailercolibri@gmail.com',
+      ...options
+    });
+    console.log('✅ Email personalizado enviado:', result.messageId);
+    return {
+      success: true,
+      messageId: result.messageId
+    };
+  } catch (error) {
+    console.error('❌ Error enviando email personalizado:', error);
+    throw new Error(`Error al enviar email: ${error instanceof Error ? error.message : 'Error desconocido'}`);
+  }
 };
