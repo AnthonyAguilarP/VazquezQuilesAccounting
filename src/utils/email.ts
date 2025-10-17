@@ -4,13 +4,11 @@ import path from 'path';
 import fs from 'fs';
 
 const SITE_URL = 'https://vazquezquilesaccounting.com';
+const LOGO_URL = 'https://vazquez-quiles-accounting-mrlegz5h4-anthonyaguilarps-projects.vercel.app/logo.png';
 
-// Resolve absolute path to logo in the public folder
+// Resolve absolute path to logo in the public folder (for local development)
 const LOGO_PATH = path.join(process.cwd(), 'public', 'logo.png');
-if (!fs.existsSync(LOGO_PATH)) {
-  // warn at startup so developer can fix the path
-  console.warn('[email] logo not found at', LOGO_PATH);
-}
+const USE_LOCAL_LOGO = fs.existsSync(LOGO_PATH);
 
 // Email configuration - using environment variables for security
 const EMAIL_CONFIG = {
@@ -44,8 +42,8 @@ export const generateUserConfirmationEmail = (data: {
     from: 'mailercolibri@gmail.com',
     to: data.email,
     subject: 'Confirmación - Mensaje recibido | Vázquez Quiles Accounting',
-    // Attach the logo so clients like Gmail can show it inline via cid
-    attachments: [
+    // Conditionally attach logo for local development only
+    attachments: USE_LOCAL_LOGO ? [
       {
         filename: 'logo.png',
         path: LOGO_PATH,
@@ -53,14 +51,14 @@ export const generateUserConfirmationEmail = (data: {
         contentType: 'image/png',
         contentDisposition: 'inline' as const
       }
-    ],
+    ] : [],
     html: `
       <div style="font-family: Arial, Helvetica, sans-serif; width:100%; max-width:600px; margin:0 auto;">
         <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%; border-collapse:collapse;">
           <tr>
             <td style="background:linear-gradient(90deg,#0ea5e9,#2563eb); padding:20px; text-align:center; border-top-left-radius:8px; border-top-right-radius:8px;">
               <a href="${SITE_URL}" target="_blank" style="display:inline-block; text-decoration:none;">
-                <img src="cid:logo_cid" alt="Vázquez Quiles Accounting" width="120" height="120" style="max-width:120px; height:auto; display:block; margin:0 auto 8px auto;" />
+                <img src="${USE_LOCAL_LOGO ? 'cid:logo_cid' : LOGO_URL}" alt="Vázquez Quiles Accounting" width="120" height="120" style="max-width:120px; height:auto; display:block; margin:0 auto 8px auto;" />
               </a>
               <h1 style="color:#ffffff; font-size:20px; margin:0;">Vázquez Quiles Accounting</h1>
               <p style="color:rgba(255,255,255,0.9); margin:6px 0 0 0; font-size:13px;">Servicios Profesionales de Contabilidad</p>
@@ -109,8 +107,8 @@ export const generateBusinessNotificationEmail = (data: {
     from: 'mailercolibri@gmail.com',
     to: BUSINESS_EMAILS,
     subject: `Nueva consulta de contacto - ${data.nombre}`,
-    // Attach logo for inline display in email clients
-    attachments: [
+    // Conditionally attach logo for local development only
+    attachments: USE_LOCAL_LOGO ? [
       {
         filename: 'logo.png',
         path: LOGO_PATH,
@@ -118,14 +116,14 @@ export const generateBusinessNotificationEmail = (data: {
         contentType: 'image/png',
         contentDisposition: 'inline' as const
       }
-    ],
+    ] : [],
     html: `
       <div style="font-family: Arial, Helvetica, sans-serif; width:100%; max-width:600px; margin:0 auto;">
         <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%; border-collapse:collapse;">
           <tr>
             <td style="background:linear-gradient(90deg,#0ea5e9,#2563eb); padding:18px; text-align:center; border-top-left-radius:8px; border-top-right-radius:8px;">
               <a href="${SITE_URL}" target="_blank" style="display:inline-block; text-decoration:none;">
-                <img src="cid:logo_cid" alt="Vázquez Quiles Accounting" width="110" height="110" style="max-width:110px; height:auto; display:block; margin:0 auto 8px auto;" />
+                <img src="${USE_LOCAL_LOGO ? 'cid:logo_cid' : LOGO_URL}" alt="Vázquez Quiles Accounting" width="110" height="110" style="max-width:110px; height:auto; display:block; margin:0 auto 8px auto;" />
               </a>
               <h1 style="color:#ffffff; font-size:18px; margin:0;">Nueva Consulta de Contacto</h1>
               <p style="color:rgba(255,255,255,0.95); margin:6px 0 0 0; font-size:12px;">Enviado desde: Vázquez Quiles Accounting</p>
